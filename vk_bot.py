@@ -15,13 +15,13 @@ def answer(event, vk_api, dialogflow_project_id):
         text=event.text,
         language_code="ru-RU",
     )
-
+    text = dialogflow_answer['text']
     if dialogflow_answer['is_fallback']:
         return
 
     vk_api.messages.send(
         user_id=event.user_id,
-        message=dialogflow_answer['text'],
+        message=text,
         random_id=random.randint(1, 1000)
     )
 
