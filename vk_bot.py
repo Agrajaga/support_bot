@@ -9,16 +9,19 @@ from dialogflow_api import detect_intent_texts
 
 
 def answer(event, vk_api, dialogflow_project_id):
-    text = detect_intent_texts(
+    dialogflow_answer = detect_intent_texts(
         project_id=dialogflow_project_id,
         session_id=event.user_id,
         text=event.text,
         language_code="ru-RU",
     )
 
+    if dialogflow_answer['is_fallback']:
+        return
+
     vk_api.messages.send(
         user_id=event.user_id,
-        message=text,
+        message=dialogflow_answer['text'],
         random_id=random.randint(1, 1000)
     )
 

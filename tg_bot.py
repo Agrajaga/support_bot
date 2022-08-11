@@ -13,19 +13,19 @@ def start(update: Update, context: CallbackContext) -> None:
     update.message.reply_text("Здравствуйте!")
 
 
-def echo(update: Update, context: CallbackContext) -> None:
-    """Echo the user message."""
+def answer(update: Update, context: CallbackContext) -> None:
+    """Answer to user"""
     session_id = update.effective_chat.id
     dialogflow_project_id = context.bot_data['dialogflow_project_id']
 
-    update.message.reply_text(
-        detect_intent_texts(
-            dialogflow_project_id,
-            session_id,
-            update.message.text,
-            "ru-RU"
-        )
+    dialogflow_answer = detect_intent_texts(
+        dialogflow_project_id,
+        session_id,
+        update.message.text,
+        "ru-RU"
     )
+    
+    update.message.reply_text(dialogflow_answer['text'])
 
 
 def main() -> None:
@@ -39,7 +39,7 @@ def main() -> None:
     dispatcher.bot_data['dialogflow_project_id'] = dialogflow_project_id
     dispatcher.add_handler(CommandHandler("start", start))
     dispatcher.add_handler(MessageHandler(
-        Filters.text & ~Filters.command, echo))
+        Filters.text & ~Filters.command, answer))
     updater.start_polling()
     updater.idle()
 
