@@ -39,8 +39,9 @@ def answer(update: Update, context: CallbackContext) -> None:
         update.message.text,
         "ru-RU"
     )
-
-    update.message.reply_text(dialogflow_answer['text'])
+    text = dialogflow_answer['text']
+    if text:
+        update.message.reply_text(text)
 
 
 def main() -> None:
