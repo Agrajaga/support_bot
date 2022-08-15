@@ -2,25 +2,14 @@ import logging
 import os
 
 from dotenv import load_dotenv
-from telegram import Update, Bot
+from telegram import Update
 from telegram.ext import (CallbackContext, CommandHandler, Filters,
                           MessageHandler, Updater)
 
 from dialogflow_api import detect_intent_texts
-
+from logs_handling import TelegramLogsHandler
 
 logger = logging.getLogger("dialogflow")
-
-
-class TelegramLogsHandler(logging.Handler):
-    def __init__(self, tg_bot: Bot, chat_id: int) -> None:
-        super().__init__()
-        self.tg_bot = tg_bot
-        self.chat_id = chat_id
-
-    def emit(self, record):
-        log_entry = self.format(record)
-        self.tg_bot.send_message(chat_id=self.chat_id, text=log_entry)
 
 
 def start(update: Update, context: CallbackContext) -> None:

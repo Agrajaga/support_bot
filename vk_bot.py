@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 from vk_api.longpoll import VkEventType, VkLongPoll
 
 from dialogflow_api import detect_intent_texts
+from logs_handling import TelegramLogsHandler
 
 logger = logging.getLogger("dialogflow")
 
@@ -28,17 +29,6 @@ def answer(event, vk_api, dialogflow_project_id):
         message=text,
         random_id=random.randint(1, 1000)
     )
-
-
-class TelegramLogsHandler(logging.Handler):
-    def __init__(self, tg_bot, chat_id):
-        super().__init__()
-        self.tg_bot = tg_bot
-        self.chat_id = chat_id
-
-    def emit(self, record):
-        log_entry = self.format(record)
-        self.tg_bot.send_message(chat_id=self.chat_id, text=log_entry)
 
 
 if __name__ == "__main__":
